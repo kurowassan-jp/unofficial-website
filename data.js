@@ -79,7 +79,7 @@ const taiwanFeature = {
 // 好きな表記でOK（例: "105万人" "418本"）
 const channelStats = {
   subscribers: "105万人",
-  videoCount: "418本"
+  videoCount: "419本"
 };
 
 /* ---------- 再生数ランキング TOP3 ---------- */
