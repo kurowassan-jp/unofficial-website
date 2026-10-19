@@ -289,7 +289,10 @@ const countries = [
   {name:"スペイン", continent:"europe", videos:[{title:"初めてのスペイン旅行🇪🇸マドリードとバスク地方を巡る5日間の美食旅", url:"https://youtu.be/aGO-zLf2mlI?si=rDBxKupAAlbZ_umD"}]},
   {name:"スイス", continent:"europe", videos:[{title:"スイスを巡る８日間、美しい街から湖を渡りアルプスへ｜チューリッヒ｜マッターホルン", url:"https://youtu.be/HHcS7msn2VQ?si=9ZP0WhnE1sDNKBwV"}]},
   {name:"オランダ", continent:"europe", videos:[]},
-  {name:"ポルトガル", continent:"europe", videos:[{title:"ポルトガル縦断の旅🇵🇹北から南へ、町を辿りながら世界の果てを目指す1週間｜リスボン・ポルト", url:"https://youtu.be/g_tgj4HWYB8?si=u88_htpaTdXjri2n"}]},
+  {name:"ポルトガル", continent:"europe", videos:[
+     {title:"ポルトガル縦断の旅🇵🇹北から南へ、町を辿りながら世界の果てを目指す1週間｜リスボン・ポルト", url:"https://youtu.be/g_tgj4HWYB8?si=u88_htpaTdXjri2n", thumb:""},
+     {title:"ポルトガル旅の本編に入りきらなかった未公開シーン集🇵🇹", url:"https://youtu.be/iWTdzLQ9vzI?si=AyJUqkWx0Lict2Uj", thumb:""}
+  ]},
   {name:"ギリシャ", continent:"europe", videos:[]},
   {name:"デンマーク", continent:"europe", videos:[{title:"最高の北欧旅行｜７日間で巡るデンマーク・ノルウェー・スウェーデン｜童話の街からフィヨルドへ", url:"https://youtu.be/9q4vaFIf9Pw?si=bCq-9VkHjNJKwmnR"}]},
   {name:"ノルウェー", continent:"europe", videos:[{title:"最高の北欧旅行｜７日間で巡るデンマーク・ノルウェー・スウェーデン｜童話の街からフィヨルドへ", url:"https://youtu.be/9q4vaFIf9Pw?si=bCq-9VkHjNJKwmnR"}]},
