@@ -511,14 +511,16 @@ function setYouTubeThumb(img, id){
     if(i >= names.length) return;
     img.src = `https://img.youtube.com/vi/${id}/${names[i++]}.jpg`;
   };
-  img.addEventListener("load", () => {
+  // 切り替えのたびに上書きする（addEventListener だと古い処理が残り、前の動画の画像に戻ることがあるため）
+  img.onload = () => {
     if(img.naturalWidth <= 120 && i < names.length) tryNext();
-  });
-  img.addEventListener("error", tryNext);
+  };
+  img.onerror = tryNext;
   tryNext();
 }
 
-const HERO_SECONDS = 7; // ホームの写真枠：何秒ごとにサムネイルを切り替えるか
+// ホームの写真枠：何秒ごとにサムネイルを切り替えるか（data.js の heroSlideSeconds を使う。無ければ7秒）
+const HERO_SECONDS = (typeof heroSlideSeconds === "number" && heroSlideSeconds > 0) ? heroSlideSeconds : 7;
 
 function renderHeroMedia(){
   const container = document.getElementById("heroMedia");
@@ -549,12 +551,10 @@ function renderHeroMedia(){
 
   if(clips.length < 2) return;
   function next(){
-    const cur = clips[idx % clips.length];
     setTimeout(() => {
       idx++;
       const nextClip = clips[idx % clips.length];
       const incoming = imgs[1 - side];
-      incoming.onload = null;
       setYouTubeThumb(incoming, extractYouTubeId(nextClip.url));
       imgs[side].classList.remove("active");
       incoming.classList.add("active");
