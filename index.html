@@ -7,6 +7,144 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+/* =====================================================================
+   トップページ専用の見た目（style.css より後に読み込むので、こちらが優先されます）
+   国内・海外・台湾ページには影響しません
+   ===================================================================== */
+
+/* ---------- ロゴ下の説明 ---------- */
+.topbar-note{margin:0;font-size:.86rem;color:var(--muted);}
+.topbar-note b{color:var(--ink);font-weight:700;margin-right:.6em;}
+
+/* ---------- 写真（ポラロイド風のカード） ---------- */
+.photo-card{
+  background:var(--card);border:1px solid var(--line);border-radius:6px;
+  padding:14px 14px 16px;box-shadow:0 10px 26px rgba(0,0,0,.08);
+}
+.photo-illustration{border-radius:3px;}
+.photo-foot{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-top:14px;font-size:.88rem;
+}
+.photo-foot span{font-weight:900;}
+.photo-foot a{font-weight:700;color:var(--olive-dark);text-decoration:none;border-bottom:1px solid currentColor;}
+.photo-foot a:hover{color:var(--ink);}
+
+/* ---------- 大見出し ---------- */
+.hero-copy h1 .accent{color:var(--olive-dark);}
+
+/* 左の写真の列と高さを揃える（右下に空きを作らない） */
+.hero-grid{align-items:stretch;}
+.hero-copy{display:flex;flex-direction:column;}
+
+/* ---------- 数字（箱にせず、罫線で区切った表のように） ---------- */
+.stats{
+  display:grid;grid-template-columns:1.25fr 1fr 1fr;
+  border-top:1.5px solid var(--ink);border-bottom:1px solid var(--line);
+}
+.stat{
+  display:flex;flex-direction:column;gap:6px;
+  padding:14px 14px 16px;border-left:1px solid var(--line);
+  text-decoration:none;color:var(--ink);
+}
+.stat:first-child{border-left:none;padding-left:0;}
+.st-label{font-size:.78rem;color:var(--muted);font-weight:700;}
+.st-label::after{content:" →";transition:margin .2s ease;}
+.stat:hover .st-label{color:var(--olive-dark);}
+.stat:hover .st-label::after{margin-left:4px;}
+.st-num{font-family:'Archivo',sans-serif;font-weight:900;font-size:2.2rem;line-height:1;white-space:nowrap;}
+.st-num small{font-size:1rem;color:var(--muted);font-weight:700;margin-left:2px;}
+
+/* ---------- 旅の足あと（1都道府県＝1つの丸） ---------- */
+.footprint{flex:1;display:flex;flex-direction:column;margin-top:34px;}
+.fp-head{
+  display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;
+  padding:12px 0 10px;border-top:1.5px solid var(--ink);
+}
+.fp-title{margin:0;font-weight:900;font-size:1.1rem;}
+.fp-legend{margin:0;font-size:.74rem;color:var(--muted);display:flex;align-items:center;gap:6px;}
+.fp-legend i{margin-left:8px;}
+.fp-japan{flex:1;display:flex;flex-direction:column;}
+.fp-regions{flex:1;display:flex;flex-direction:column;justify-content:space-between;}
+.fp-row{
+  display:grid;grid-template-columns:5.6em 1fr auto;align-items:center;gap:12px;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  text-decoration:none;color:var(--ink);
+}
+.fp-row:first-child{border-top:1px solid var(--line);}
+.fp-name{font-size:.88rem;font-weight:700;white-space:nowrap;}
+.fp-row:hover .fp-name{color:var(--olive-dark);}
+/* 棒グラフ：角は四角く、色は1色だけ。罫線の上に細い線が伸びるイメージ */
+.fp-bar{position:relative;height:5px;background:var(--line);}
+.fp-bar i{
+  position:absolute;left:0;top:0;bottom:0;width:0;
+  background:var(--olive-dark);
+  transition:width 1.1s cubic-bezier(.2,.7,.2,1);
+}
+.fp-row:hover .fp-bar i{background:var(--ink);}
+.fp-count{font-family:'Archivo',sans-serif;font-size:.8rem;color:var(--muted);white-space:nowrap;}
+.fp-count b{color:var(--ink);font-weight:900;font-size:.95rem;}
+
+
+/* 海外：大陸ごとの国数 */
+.fp-world{margin-top:22px;}
+.fp-sublabel{margin:0 0 4px;font-size:.78rem;font-weight:700;color:var(--muted);}
+.fp-continents{display:grid;grid-template-columns:repeat(3,1fr);column-gap:16px;}
+.fp-cont{
+  display:flex;justify-content:space-between;align-items:baseline;gap:6px;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  text-decoration:none;color:var(--ink);
+}
+.fc-name{font-size:.84rem;font-weight:700;white-space:nowrap;}
+.fc-num{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.15rem;}
+.fc-num small{font-family:'Zen Kaku Gothic New',sans-serif;font-size:.66rem;font-weight:700;color:var(--muted);margin-left:2px;}
+.fp-cont.is-yet .fc-name,.fp-cont.is-yet .fc-num{color:#b3ab95;font-weight:500;}
+.fp-cont:hover .fc-name{color:var(--olive-dark);}
+
+/* ---------- ランキング：番号をサムネイルの上に重ねず、上に出す ---------- */
+.ranking-card{display:flex;flex-direction:column;}
+.rank-badge{
+  position:static;width:auto;height:auto;border-radius:0;
+  background:none;box-shadow:none;
+  display:flex;align-items:baseline;justify-content:flex-start;gap:6px;
+  font-size:1.9rem;line-height:1;margin:0 0 10px;padding-bottom:8px;
+  border-bottom:1.5px solid var(--ink);
+}
+.rank-badge::before{content:"No.";font-size:.72rem;font-weight:700;color:var(--muted);}
+
+/* ---------- 数字の「○○時点」の注記・YouTubeの出典表示 ---------- */
+.asof{margin:8px 0 0;font-size:.74rem;color:var(--muted);}
+.asof-inline{font-size:.74rem;color:var(--muted);margin-left:.4em;}
+#heroMedia.is-link{cursor:pointer;}
+
+/* ---------- ページ一覧 ---------- */
+.page-index{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;padding:22px 0;}
+.pi-label{margin:0;font-size:.8rem;font-weight:700;color:var(--muted);}
+.page-index ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 0;}
+.page-index li{font-size:.92rem;font-weight:700;}
+.page-index li + li::before{content:"/";color:var(--line);margin:0 12px;font-weight:400;}
+.page-index a{text-decoration:none;}
+.page-index a:hover{color:var(--olive-dark);text-decoration:underline;text-underline-offset:3px;}
+
+/* ---------- スマホ ---------- */
+@media (max-width:600px){
+  .photo-card{padding:10px 10px 12px;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .stat:first-child{grid-column:1 / -1;border-bottom:1px solid var(--line);}
+  .stat:nth-child(2){border-left:none;padding-left:0;}
+  .st-num{font-size:1.9rem;}
+  .fp-continents{grid-template-columns:repeat(2,1fr);}
+  .page-index{padding:18px 0;}
+
+  /* ランキング：左にサムネイル、右に番号・タイトル・再生数 */
+  .ranking-card{display:grid;grid-template-rows:auto auto auto;align-items:start;}
+  .rank-badge{grid-column:2;grid-row:1;font-size:1.3rem;margin:0 0 6px;padding-bottom:5px;border-bottom-width:1px;}
+  .ranking-card .ranking-thumb{grid-column:1;grid-row:1 / span 3;align-self:center;}
+  .ranking-card .ranking-title{grid-column:2;grid-row:2;align-self:start;margin:0;}
+  .ranking-card .ranking-views{grid-column:2;grid-row:3;margin:2px 0 0;}
+}
+</style>
 </head>
 <body>
 
@@ -22,10 +160,7 @@
 
 <div class="wrap topbar">
   <h1 class="wordmark">MAIBARU<br>TRAVEL</h1>
-  <div class="topbar-meta">
-    <p>47都道府県と6大陸。Yuuと二人の旅を記録しています。<br>このサイトは非公式ファンサイトです</p>
-    <p class="unofficial">UNOFFICIAL FAN SITE<b>Maibaru Travelの旅の記録</b></p>
-  </div>
+  <p class="topbar-note"><b>非公式ファンサイト</b>日本の各地から世界の街角まで、MaibaruさんとYuuさんが歩いた旅先をまとめています。</p>
 </div>
 <hr class="rule">
 
@@ -53,16 +188,17 @@
           <path d="M75,96 C140,60 220,70 280,110" stroke="#3A3A34" stroke-width="2" stroke-dasharray="4 6" fill="none"/>
         </svg>
       </div>
-      <span class="photo-tag">これまでの<br>旅の記録</span>
-      <span class="photo-badge">幸せそうな<br>Maibaru<br>さん</span>
-      <a class="photo-arrow" href="https://www.youtube.com/c/maibaru" target="_blank" rel="noopener">↗</a>
+      <div class="photo-foot">
+        <span>これまでの旅の記録から</span>
+        <a id="heroLink" href="https://www.youtube.com/c/maibaru" target="_blank" rel="noopener">YouTubeで見る ▶</a>
+      </div>
     </div>
     <p class="photo-link">2018年にタイでスタートした旅行系YouTubeチャンネル「MAIBARU TRAVEL」。日本各地の旅から海外旅行まで、実際にその土地を歩きながら、景色や食、文化、人との出会いを映像に残してきました。旅先の魅力を美しい映像とともに伝えるスタイルが人気を集め、今では多くの旅好きに知られる存在に。これまでの旅を通して、さまざまな場所の新しい魅力を発信し続けています。</p>
 
     <div class="fun-fact">
       <p class="fun-fact-kicker en">VIDEOS</p>
       <p class="fun-fact-num"><span id="videoCountDisplay" class="en">0</span></p>
-      <p class="fun-fact-desc">これまでの投稿動画本数</p>
+      <p class="fun-fact-desc">これまでの投稿動画本数<span class="asof-inline" data-asof></span></p>
     </div>
 
     <div class="profile-block">
@@ -78,34 +214,37 @@
   </div>
 
   <div class="hero-copy">
-    <p class="eyebrow en">HELLO, MAIBARU FANS.</p>
-    <h1>Maibaru Travelの<br>旅と記録の<br><mark>まとめ。</mark></h1>
-    <p class="desc">動画で紹介された旅先を、国内は地方別、海外は大陸別にまとめた非公式ファンサイトです。下線付きのリンクから、旅の記録をたどれます。</p>
-    <hr class="rule">
-    <div class="stat-row">
-      <div>
-        <p class="stat-kicker en">CHANNEL</p>
-        <p class="stat-sub">YouTube登録者数</p>
-        <p class="stat-num" id="subscriberDisplay">-</p>
-      </div>
-      <a class="big-arrow en" href="https://www.youtube.com/c/maibaru" target="_blank" rel="noopener">▶</a>
+    <p class="eyebrow">旅先アーカイブ</p>
+    <h1>あの旅先を、<br>もう一度<br><span class="accent">めぐろう。</span></h1>
+    <p class="desc">動画で紹介された旅先を、国内は地方別、海外は大陸別にまとめた非公式ファンサイトです。下の数字や地方名から、それぞれの一覧へ進めます。</p>
+
+    <div class="stats">
+      <a class="stat" href="https://www.youtube.com/c/maibaru" target="_blank" rel="noopener">
+        <span class="st-label">YouTube登録者数</span>
+        <span class="st-num" id="subscriberDisplay">-</span>
+      </a>
+      <a class="stat" href="japan.html">
+        <span class="st-label">都道府県</span>
+        <span class="st-num"><span id="statPref">0</span><small>/47</small></span>
+      </a>
+      <a class="stat" href="world.html">
+        <span class="st-label">大陸</span>
+        <span class="st-num"><span id="statContinent">0</span><small>/<span id="continentTotal">6</span></small></span>
+      </a>
     </div>
-    <hr class="rule">
-    <div class="stat-row">
-      <div>
-        <p class="stat-kicker en">JAPAN</p>
-        <p class="stat-sub">Maibaruの足あと</p>
-        <p class="stat-num"><span id="statPref">0</span><span class="stat-num-sub">/47</span></p>
-        <p class="stat-unit">都道府県</p>
-        <a class="stat-link" href="japan.html">国内の旅の記録を見る ↗</a>
+    <p class="asof" id="statsAsOf"></p>
+
+    <div class="footprint">
+      <div class="fp-head">
+        <h2 class="fp-title">旅の足あと</h2>
+        <p class="fp-legend">紹介済み／都道府県数</p>
       </div>
-    </div>
-    <hr class="rule">
-    <div class="stat-row">
-      <div>
-        <p class="stat-kicker en">BEYOND JAPAN</p>
-        <p class="stat-line">世界も、<span id="statContinent">0</span>/<span id="continentTotal">6</span> 大陸。</p>
-        <a class="stat-link" href="world.html">海の向こうの記録へ ↗</a>
+      <div class="fp-japan">
+        <div class="fp-regions" id="fpRegions"></div>
+      </div>
+      <div class="fp-world">
+        <p class="fp-sublabel">海外</p>
+        <div class="fp-continents" id="fpContinents"></div>
       </div>
     </div>
   </div>
@@ -115,7 +254,7 @@
 <div class="wrap" id="ranking" style="padding:40px 0 10px;">
   <p class="kicker en" style="font-family:'Archivo',sans-serif;font-size:.78rem;letter-spacing:.06em;color:var(--muted);">RANKING</p>
   <h2 style="font-weight:900;font-size:1.5rem;margin:8px 0 6px;">再生数ランキング TOP3</h2>
-  <p style="font-size:.9rem;color:var(--muted);max-width:48ch;margin:0;">これまでの動画の中で再生数が多かった3本</p>
+  <p style="font-size:.9rem;color:var(--muted);max-width:48ch;margin:0;">これまでの動画の中で再生数が多かった3本。押すとYouTubeで再生されます。<span class="asof-inline" data-asof></span></p>
   <div class="ranking-grid" id="rankingGrid"></div>
 </div>
 
@@ -123,7 +262,7 @@
 <div class="wrap" id="recommend" style="padding:40px 0 10px;">
   <p class="kicker en" style="font-family:'Archivo',sans-serif;font-size:.78rem;letter-spacing:.06em;color:var(--muted);">RECOMMEND</p>
   <h2 style="font-weight:900;font-size:1.5rem;margin:8px 0 6px;">秋のおすすめ動画</h2>
-  <p style="font-size:.9rem;color:var(--muted);max-width:48ch;margin:0 0 4px;">MAIBARU TRAVELでこれまでに訪れた、心癒やされる秋の旅をお楽しみください</p>
+  <p style="font-size:.9rem;color:var(--muted);max-width:48ch;margin:0 0 4px;">MAIBARU TRAVELでこれまでに訪れた、心癒やされる秋の旅をお楽しみください。押すとYouTubeで再生されます。</p>
   <div class="carousel">
     <button class="car-btn" id="carPrev" aria-label="前の動画へ">←</button>
     <div class="car-viewport"><div class="car-track" id="carTrack"></div></div>
@@ -188,25 +327,28 @@
 </div>
 
 <hr class="rule">
-<div class="wrap footer-nav">
-  <span class="explore">EXPLORE MAIBARU ↘</span>
-  <a href="japan.html">国内の旅</a><span class="dot">🌿</span>
-  <a href="world.html">海外の旅</a><span class="dot">📍</span>
-  <a href="#sns">SNS</a><span class="dot">📷</span>
-  <a href="#note">note</a><span class="dot">✍️</span>
-  <a href="#about">このサイトについて</a>
-</div>
+<nav class="wrap page-index" aria-label="ページ一覧">
+  <p class="pi-label">ページ一覧</p>
+  <ul>
+    <li><a href="japan.html">国内の旅</a></li>
+    <li><a href="world.html">海外の旅</a></li>
+    <li><a href="taiwan.html">台湾特集</a></li>
+    <li><a href="#sns">SNS</a></li>
+    <li><a href="#note">note</a></li>
+    <li><a href="#about">このサイトについて</a></li>
+  </ul>
+</nav>
 <hr class="rule">
-
-
 
 <div class="wrap about-block" id="about">
   <hr class="rule" style="margin-bottom:26px;">
   <p class="en" style="font-family:'Archivo',sans-serif;font-size:.78rem;letter-spacing:.06em;color:var(--muted);">ABOUT</p>
   <h2 style="font-weight:900;font-size:1.4rem;margin:6px 0 12px;">このサイトについて</h2>
-  <p>本サイトは Maibaru Travel の非公式ファンサイトです。ご本人・運営とは関係ありません。掲載している旅の記録は個人がまとめたものであり、内容の正確性を保証するものではありません。不定期で更新を行う予定であるため最新の情報は公式のYouThubeチャンネルでご確認ください。本サイトは非営利で運営されているため、予告なく終了する可能性があります。</p>
+  <p>本サイトは Maibaru Travel の非公式ファンサイトです。ご本人・運営とは関係ありません。掲載している旅の記録は個人がまとめたものであり、内容の正確性を保証するものではありません。不定期で更新を行う予定であるため最新の情報は公式のYouTubeチャンネルでご確認ください。本サイトは非営利で運営されているため、予告なく終了する可能性があります。</p>
   <p>すべての動画・映像の著作権は Maibaru Travel に帰属します。</p>
-  <p>もし間違いやご意見がございましたら、お手数ですが以下のご意見フォームまで回答いただけますと幸いです。<p>
+  <p>本サイトに表示している動画のサムネイル画像・タイトルは YouTube 上の Maibaru Travel 公式チャンネルのものです。押すと YouTube の各動画ページが開きます。本サイトは YouTube および Google LLC とも関係がなく、承認を受けたものではありません。YouTube は Google LLC の商標です。</p>
+  <p>チャンネル登録者数・再生数・投稿本数は、手入力で更新した時点の数字です。最新の数字は YouTube でご確認ください。</p>
+  <p>もし間違いやご意見がございましたら、お手数ですが以下のご意見フォームまで回答いただけますと幸いです。</p>
 </div>
 
 <footer class="wrap site-footer">
@@ -221,6 +363,93 @@
 
 <script src="data.js"></script>
 <script src="app.js"></script>
+<script>
+/* ---------- 数字の「○○時点」表示 ----------
+   data.js の channelStats に asOf:"2026年10月20日" のように書くと、その日付が表示されます */
+document.addEventListener("DOMContentLoaded", () => {
+  const asOf = (typeof channelStats !== "undefined" && channelStats.asOf) ? channelStats.asOf : "";
+  document.querySelectorAll("[data-asof]").forEach(el => {
+    el.textContent = asOf ? `（${asOf}時点）` : "（更新時点の数字）";
+  });
+  const note = document.getElementById("statsAsOf");
+  if(note){
+    note.textContent = (asOf ? `登録者数は${asOf}時点の数字です。` : "登録者数は更新時点の数字です。")
+      + "最新の数字はYouTubeでご確認ください。";
+  }
+});
+
+/* ---------- 写真枠：いま表示しているサムネイルの動画へリンクする ----------
+   サムネイルだけを表示せず、必ず元の動画（YouTube）へたどれるようにします */
+document.addEventListener("DOMContentLoaded", () => {
+  const media = document.getElementById("heroMedia");
+  const link = document.getElementById("heroLink");
+  if(!media || !link) return;
+  let currentId = "";
+  const sync = () => {
+    const img = media.querySelector("img.hero-frame.active");
+    const m = img && img.src.match(/\/vi\/([\w-]{11})\//);
+    // 同じ動画のままなら何もしない（ここで何かを書き換えると、それを検知してまた動き、無限ループになるため）
+    if(!m || m[1] === currentId) return;
+    currentId = m[1];
+    link.href = `https://www.youtube.com/watch?v=${currentId}`;
+    link.textContent = "この動画をYouTubeで見る ▶";
+    if(!media.classList.contains("is-link")) media.classList.add("is-link");
+  };
+  // 写真枠の中の画像だけを見張る（写真枠そのものの変化は見ない）
+  new MutationObserver(sync).observe(media, { subtree:true, attributes:true, attributeFilter:["class","src"], childList:true });
+  sync();
+  media.addEventListener("click", () => {
+    if(media.classList.contains("is-link")) window.open(link.href, "_blank", "noopener");
+  });
+});
+
+/* ---------- 旅の足あと（data.js の prefectures / countries から自動で作ります） ---------- */
+document.addEventListener("DOMContentLoaded", () => {
+  // 国内：地方ごとの棒グラフ（紹介済みの割合）
+  const regionBox = document.getElementById("fpRegions");
+  if(regionBox && typeof REGIONS !== "undefined"){
+    REGIONS.forEach((g, i) => {
+      const items = prefectures.filter(p => p.region === g.key);
+      const visited = items.filter(hasVideo).length;
+      const row = document.createElement("a");
+      row.href = "japan.html";
+      row.className = "fp-row";
+      row.title = items.filter(hasVideo).map(p => p.name).join("・") || "まだ紹介なし";
+      row.innerHTML =
+        `<span class="fp-name">${g.label.replace("地方", "")}</span>` +
+        `<span class="fp-bar"><i style="transition-delay:${i * 80}ms"></i></span>` +
+        `<span class="fp-count"><b>${visited}</b>/${items.length}</span>`;
+      row.querySelector("i").dataset.w = items.length ? (visited / items.length * 100) : 0;
+      regionBox.appendChild(row);
+    });
+    // 画面に入ったら、上から順に棒が伸びる
+    whenVisible(regionBox, () => {
+      regionBox.querySelectorAll(".fp-bar i").forEach(i => { i.style.width = i.dataset.w + "%"; });
+    });
+  }
+
+  // 海外：大陸ごとの国数（数字はカウントアップ）
+  const contBox = document.getElementById("fpContinents");
+  if(contBox && typeof CONTINENTS !== "undefined"){
+    const counters = [];
+    CONTINENTS.forEach(c => {
+      const count = countries.filter(x => x.continent === c.key && hasVideo(x)).length;
+      const el = document.createElement("a");
+      el.href = "world.html";
+      el.className = "fp-cont" + (count ? "" : " is-yet");
+      if(count){
+        const unit = c.key === "asia" ? "ヶ国と地域" : "ヶ国";
+        el.innerHTML = `<span class="fc-name">${c.label}</span><span class="fc-num"><span class="fc-count">0</span><small>${unit}</small></span>`;
+        counters.push([el.querySelector(".fc-count"), count]);
+      } else {
+        el.innerHTML = `<span class="fc-name">${c.label}</span><span class="fc-num">—</span>`;
+      }
+      contBox.appendChild(el);
+    });
+    whenVisible(contBox, () => counters.forEach(([el, v]) => animateNumber(el, v, { decimals: 0 })));
+  }
+});
+</script>
 <script async src="https://www.instagram.com/embed.js"></script>
 </body>
 </html>
