@@ -103,6 +103,22 @@ const recommendedVideos = [
   {title:"美しき日本の原風景へ🌾秋の飛騨地方を巡る2泊3日の旅｜白川郷｜飛騨古川｜飛騨小坂", url:"https://youtu.be/ATWu-0gFKYY?si=bfwPIiwtwg5SQLu5"},
   {title:"会津鉄道で巡る1泊2日🍁ぶらり途中下車の旅、美しい日本の秋と絶品グルメ｜大内宿｜芦ノ牧温泉｜会津若松｜福島県", url:"https://youtu.be/zTpXlhjKW5Q?si=5Wz6rKs4jIUxK6rn"},
   {title:"日光を楽しみ尽くす黄金ルート🍁奥日光で癒される1泊2日の旅｜日光東照宮｜中禅寺湖｜戦場ヶ原｜栃木県", url:"https://youtu.be/U1ug4tCXQ5I?si=2h54SMWqt2kZIY_t"},
+  {title:"時が止まる600年の宿と紅葉の松島・仙台、2泊3日の大人旅｜鎌先温泉｜宮城旅行", url:"https://youtu.be/Q136JTVBJnc?si=jcsl5gIQRNutDXYp"},
+  {title:"秋の兵庫を縦断する旅🍁 天空の城と城崎温泉を目指して｜竹田城跡・姫路城", url:"https://youtu.be/un5qfRREwBE?si=O9qTsZE57CQqlNwp"},
+  {title:"韓国旅行🇰🇷紅葉のソウル人気スポットと韓国グルメ9選｜南大門市場｜聖水洞｜昌徳宮｜ロッテマート", url:"https://youtu.be/2AIcXuzvEuM?si=NEMmgIvuGhQcXXzt"},
+  {title:"紅葉の奈良🍁1日で巡る奈良グルメと観光スポット｜東大寺｜奈良公園", url:"https://youtu.be/G5e1LqoiZjc?si=IeoDw5IHz6osgsnb"},
+  {title:"そうだ、ベストシーズンの京都行こう🍁2泊3日でめぐる秋の京都旅行", url:"https://youtu.be/N3AH0-6F5iA?si=dvPK7dTY0OiuS-dn"},
+  {title:"美しき日本の原風景へ🌾秋の飛騨地方を巡る2泊3日の旅｜白川郷｜飛騨古川｜飛騨小坂", url:"https://youtu.be/ATWu-0gFKYY?si=bfwPIiwtwg5SQLu5"},
+  {title:"会津鉄道で巡る1泊2日🍁ぶらり途中下車の旅、美しい日本の秋と絶品グルメ｜大内宿｜芦ノ牧温泉｜会津若松｜福島県", url:"https://youtu.be/zTpXlhjKW5Q?si=5Wz6rKs4jIUxK6rn"},
+  {title:"日光を楽しみ尽くす黄金ルート🍁奥日光で癒される1泊2日の旅｜日光東照宮｜中禅寺湖｜戦場ヶ原｜栃木県", url:"https://youtu.be/U1ug4tCXQ5I?si=2h54SMWqt2kZIY_t"},
+  {title:"時が止まる600年の宿と紅葉の松島・仙台、2泊3日の大人旅｜鎌先温泉｜宮城旅行", url:"https://youtu.be/Q136JTVBJnc?si=jcsl5gIQRNutDXYp"},
+  {title:"秋の兵庫を縦断する旅🍁 天空の城と城崎温泉を目指して｜竹田城跡・姫路城", url:"https://youtu.be/un5qfRREwBE?si=O9qTsZE57CQqlNwp"},
+  {title:"韓国旅行🇰🇷紅葉のソウル人気スポットと韓国グルメ9選｜南大門市場｜聖水洞｜昌徳宮｜ロッテマート", url:"https://youtu.be/2AIcXuzvEuM?si=NEMmgIvuGhQcXXzt"},
+  {title:"紅葉の奈良🍁1日で巡る奈良グルメと観光スポット｜東大寺｜奈良公園", url:"https://youtu.be/G5e1LqoiZjc?si=IeoDw5IHz6osgsnb"},
+  {title:"そうだ、ベストシーズンの京都行こう🍁2泊3日でめぐる秋の京都旅行", url:"https://youtu.be/N3AH0-6F5iA?si=dvPK7dTY0OiuS-dn"},
+  {title:"美しき日本の原風景へ🌾秋の飛騨地方を巡る2泊3日の旅｜白川郷｜飛騨古川｜飛騨小坂", url:"https://youtu.be/ATWu-0gFKYY?si=bfwPIiwtwg5SQLu5"},
+  {title:"会津鉄道で巡る1泊2日🍁ぶらり途中下車の旅、美しい日本の秋と絶品グルメ｜大内宿｜芦ノ牧温泉｜会津若松｜福島県", url:"https://youtu.be/zTpXlhjKW5Q?si=5Wz6rKs4jIUxK6rn"},
+  {title:"日光を楽しみ尽くす黄金ルート🍁奥日光で癒される1泊2日の旅｜日光東照宮｜中禅寺湖｜戦場ヶ原｜栃木県", url:"https://youtu.be/U1ug4tCXQ5I?si=2h54SMWqt2kZIY_t"},
 ];
 
 /* ---------- Instagram 最近の投稿（何件でもOK） ---------- */
