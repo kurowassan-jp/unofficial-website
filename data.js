@@ -15,7 +15,7 @@
 
 /* ---------- ホーム画面・写真枠（YouTubeのサムネイルが自動で切り替わります） ---------- */
 // url：YouTubeの動画URL（サムネイルを自動で取得して表示します）
-// heroSlideSeconds：サムネイルを切り替える間隔（秒）
+// heroSlideSeconds：サムネイルを切り替える間隔（秒）。この数字を変えると切り替えの速さが変わります
 // 全部のurlが空欄の場合はサンプルのイラストが表示されます
 const heroSlideSeconds = 5;
 
@@ -65,8 +65,8 @@ const pageImages = {
    link     ：クリック先（"taiwan.html" など）。http で始まるURLは新しいタブで開きます
    linkLabel：右側の「…を見る ↗」の文字 */
 const taiwanFeature = {
-  image: "",
-  videoUrl: "https://youtu.be/KvNzyiciJfY?si=0xkWaIArnCAEvOFT",
+  image: "taiwan1.jpeg",
+  videoUrl: "",
   fit: "cover",
   heading: "台湾特集",
   title: "巡る、台湾の素顔。",
@@ -77,9 +77,11 @@ const taiwanFeature = {
 
 /* ---------- チャンネル登録者数・投稿動画本数 ---------- */
 // 好きな表記でOK（例: "105万人" "418本"）
+// asOf：数字を確認した日付。サイトに「○○時点」と表示されます（更新したらここも書き換えてください）
 const channelStats = {
   subscribers: "105万人",
-  videoCount: "419本"
+  videoCount: "419本",
+  asOf: "2026年10月20日"
 };
 
 /* ---------- 再生数ランキング TOP3 ---------- */
@@ -90,16 +92,9 @@ const rankingVideos = [
   {rank:3, title:"台湾てこんなに楽しい！１日で台北を遊び尽くす方法🇹🇼今なら２万円貰って格安旅行", views:"217万回再生", url:"https://youtu.be/KvNzyiciJfY?si=L-4Dn9coMQ0NEGlu"},
 ];
 
-/* ---------- おすすめ動画（横スクロールカルーセル・5件） ---------- */
+/* ---------- おすすめ動画（横スクロールカルーセル） ----------
+   同じ動画を2回書かなくても、最後まで行くと自動で最初に戻ってループします */
 const recommendedVideos = [
-  {title:"時が止まる600年の宿と紅葉の松島・仙台、2泊3日の大人旅｜鎌先温泉｜宮城旅行", url:"https://youtu.be/Q136JTVBJnc?si=jcsl5gIQRNutDXYp"},
-  {title:"秋の兵庫を縦断する旅🍁 天空の城と城崎温泉を目指して｜竹田城跡・姫路城", url:"https://youtu.be/un5qfRREwBE?si=O9qTsZE57CQqlNwp"},
-  {title:"韓国旅行🇰🇷紅葉のソウル人気スポットと韓国グルメ9選｜南大門市場｜聖水洞｜昌徳宮｜ロッテマート", url:"https://youtu.be/2AIcXuzvEuM?si=NEMmgIvuGhQcXXzt"},
-  {title:"紅葉の奈良🍁1日で巡る奈良グルメと観光スポット｜東大寺｜奈良公園", url:"https://youtu.be/G5e1LqoiZjc?si=IeoDw5IHz6osgsnb"},
-  {title:"そうだ、ベストシーズンの京都行こう🍁2泊3日でめぐる秋の京都旅行", url:"https://youtu.be/N3AH0-6F5iA?si=dvPK7dTY0OiuS-dn"},
-  {title:"美しき日本の原風景へ🌾秋の飛騨地方を巡る2泊3日の旅｜白川郷｜飛騨古川｜飛騨小坂", url:"https://youtu.be/ATWu-0gFKYY?si=bfwPIiwtwg5SQLu5"},
-  {title:"会津鉄道で巡る1泊2日🍁ぶらり途中下車の旅、美しい日本の秋と絶品グルメ｜大内宿｜芦ノ牧温泉｜会津若松｜福島県", url:"https://youtu.be/zTpXlhjKW5Q?si=5Wz6rKs4jIUxK6rn"},
-  {title:"日光を楽しみ尽くす黄金ルート🍁奥日光で癒される1泊2日の旅｜日光東照宮｜中禅寺湖｜戦場ヶ原｜栃木県", url:"https://youtu.be/U1ug4tCXQ5I?si=2h54SMWqt2kZIY_t"},
   {title:"時が止まる600年の宿と紅葉の松島・仙台、2泊3日の大人旅｜鎌先温泉｜宮城旅行", url:"https://youtu.be/Q136JTVBJnc?si=jcsl5gIQRNutDXYp"},
   {title:"秋の兵庫を縦断する旅🍁 天空の城と城崎温泉を目指して｜竹田城跡・姫路城", url:"https://youtu.be/un5qfRREwBE?si=O9qTsZE57CQqlNwp"},
   {title:"韓国旅行🇰🇷紅葉のソウル人気スポットと韓国グルメ9選｜南大門市場｜聖水洞｜昌徳宮｜ロッテマート", url:"https://youtu.be/2AIcXuzvEuM?si=NEMmgIvuGhQcXXzt"},
@@ -110,7 +105,7 @@ const recommendedVideos = [
   {title:"日光を楽しみ尽くす黄金ルート🍁奥日光で癒される1泊2日の旅｜日光東照宮｜中禅寺湖｜戦場ヶ原｜栃木県", url:"https://youtu.be/U1ug4tCXQ5I?si=2h54SMWqt2kZIY_t"},
 ];
 
-/* ---------- Instagram 最近の投稿（3件） ---------- */
+/* ---------- Instagram 最近の投稿（何件でもOK） ---------- */
 // url には投稿ページのURL（https://www.instagram.com/p/XXXXXXXXX/ の形）を入れてください
 const instagramPosts = [
   {url:"https://www.instagram.com/p/DdyTB5kE6xA/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=="},
@@ -127,7 +122,7 @@ const notePage = {
   description: "旅の裏側やコラムをnoteでも公開中。"
 };
 
-/* ---------- note+ 最近の投稿（3件） ---------- */
+/* ---------- note+ 最近の投稿（何件でもOK） ---------- */
 // url には記事のURL（https://note.com/maibaru55/n/nXXXXXXXXXXXX の形）を入れてください
 const notePosts = [
   {url:"https://note.com/maibaru55/n/n1623e0cdbc19?sub_rt=share_sb"},
