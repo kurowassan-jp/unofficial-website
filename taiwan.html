@@ -32,23 +32,18 @@
   .en{font-family:'Archivo',sans-serif;}
   a{color:inherit;}
 
-  /* ---------- 背景動画 ---------- */
+  /* ---------- 背景（写真・動画・サムネイルが左へスライドして切り替わる） ---------- */
   .video-stage{position:fixed;inset:0;overflow:hidden;background:#0e100d;}
-  .video-stage iframe{
-    position:absolute;top:50%;left:50%;
-    width:100vw;height:56.25vw;
-    min-height:100vh;min-width:177.78vh;
-    transform:translate(-50%,-50%);
-    border:0;pointer-events:none;
-    opacity:0;
-    transition:opacity .8s ease;
-  }
-  .video-stage img{
-    position:absolute;inset:0;width:100%;height:100%;
-    object-fit:cover;border:0;pointer-events:none;
+  .video-stage .bg-slot{
+    position:absolute;inset:0;
     transform:translateX(100%);
     transition:transform .9s cubic-bezier(.65,0,.35,1);
     will-change:transform;
+  }
+  .video-stage .bg-slot img,
+  .video-stage .bg-slot video{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;border:0;display:block;pointer-events:none;
   }
   .overlay{
     position:fixed;inset:0;pointer-events:none;
@@ -484,7 +479,7 @@
 
 <div class="bottom-bar">
   <a class="watch-btn" id="watchBtn" href="https://www.youtube.com/c/maibaru" target="_blank" rel="noopener">
-    <span class="wb-icon">▶</span> この動画を見る
+    <span class="wb-icon">▶</span> <span id="watchLabel">YouTubeでこの動画を見る</span>
   </a>
 </div>
 
@@ -503,9 +498,9 @@
    - url    ：YouTubeの動画URL（サムネイルは自動で表示されます）
    - tags   ：ラベル。サムネイルの左上に表示されます（県・市や「食」「自然」などのジャンル。いくつでもOK）
                 例）tags:["高雄市","食"]
-   - bg     ：背景に流す動画を選ぶ印。bg:true を付けた動画のサムネイルだけが背景で流れます
+   - bg     ：背景に流すサムネイルを選ぶ印（下の BG_SLIDES が空の地域だけで使われます）
+                bg:true を付けた動画のサムネイルだけが背景で流れます
                 （その地域のどれにも付けなければ、その地域の動画が全部、順番に流れます）
-                切り替えの間隔は、この下の BG_SECONDS（秒）で変更できます
    - home   ：Topで紹介する動画を選ぶ印と、並べる順番。数字を入れると、その順番（1が一番上）で並びます
                 例）home:1 → 1番目 / home:2 → 2番目 / home:3 → 3番目
                 数字の無い home:true は、数字付きのあとに元の順で並びます。
@@ -516,10 +511,54 @@
    - 紹介されている動画をクリックすると、その動画のURL（YouTube）が新しいタブで開きます
    - urlが空欄のものも紹介には出ますが、再生はされません（準備中の表示になります）
    - 中央の説明エリアの画像・説明文は、この下にある REGION_INFO で編集できます
+   - 背景に流すもの（自分の写真・動画・サムネイル）は、この下にある BG_SLIDES で編集できます
    - 地図画像が見つからない時に「用意してください」の仮の枠を出したい場合は、
      下の SHOW_MAP_PLACEHOLDER を true にしてください（初期値は false＝出さない）
 =================================================================== */
-const BG_SECONDS = 6; // 背景のサムネイルが左にスライドして切り替わる間隔（秒）
+const BG_SECONDS = 6; // 背景が左にスライドして切り替わる間隔（秒）。写真・サムネイルの標準の表示時間
+
+/* ===================================================================
+   背景に流すもの（地域ごと・好きな順番で。写真・動画・サムネイルを混ぜてOK）
+   ------------------------------------------------------------------
+   上から順番に流れ、最後まで行ったら最初に戻ります。1件ずつ { } で書きます。
+
+   ■ 自分の写真      { image:"taiwan-bg/top-01.jpg" }
+   ■ 自分の動画      { video:"taiwan-bg/top-clip.mp4" }
+                       → 最後まで再生されたら次へ進みます（音は出ません）
+                       → 途中で切り替えたい時は seconds:8 のように秒数を書きます
+                       → poster:"taiwan-bg/top-clip.jpg" で、読み込み中に出す画像も指定できます
+   ■ YouTubeのサムネイル { url:"https://youtu.be/XXXXXXXXXXX" }
+                       → 上の TAIWAN_VIDEOS に同じ動画があれば、タイトルとリンクは自動で入ります
+
+   どれにも付けられるもの（なくてもOK）
+     title   ：画面下に出す文字（写真・動画のときは書くと表示されます）
+     link    ：左下のボタンの移動先（例 "https://youtu.be/XXXXXXXXXXX"）。無ければボタンは隠れます
+     seconds ：この1枚だけ表示時間を変える（秒）
+
+   - 地域の [ ] が空のときは、今まで通り bg:true のサムネイルが流れます
+   - 写真・動画のファイルは taiwan.html と同じ場所（例：taiwan-bg フォルダの中）に置いてください
+   - 動画はスマホでも読み込まれるので、10〜20秒・数MB程度の短いものがおすすめです
+=================================================================== */
+const BG_SLIDES = {
+  // Top：この順番で流れます（下の例の // を消して、ファイル名を書き換えてください）
+  all: [
+    // { image:"taiwan-bg/top-01.jpg", title:"九份の夜" },
+    // { video:"taiwan-bg/top-clip.mp4", title:"台北の街角", link:"https://youtu.be/KvNzyiciJfY" },
+    // { url:"https://youtu.be/cFRRUZeZExw" },
+    // { image:"taiwan-bg/top-02.jpg", seconds:4 },
+  ],
+  // 北部
+  north: [
+    // { image:"taiwan-bg/north-01.jpg", title:"淡水の夕暮れ" },
+    // { url:"https://youtu.be/NUHXpzvbqgE" },
+  ],
+  // 中部
+  central: [],
+  // 南部
+  south: [],
+  // 東部
+  east: [],
+};
 
 const TAIWAN_VIDEOS = {
   north: [
@@ -527,7 +566,7 @@ const TAIWAN_VIDEOS = {
     {title:"週末弾丸台湾旅行🇹🇼台北と鹿港老街", url:"https://youtu.be/R0GVwTMZW_4?si=xAt_Uf2rslaPPM1w", bg:true, tags:["メンバーシップ限定"]},
     {title:"台湾てこんなに楽しい！１日で台北を遊び尽くす方法🇹🇼今なら２万円貰って格安旅行", url:"https://youtu.be/KvNzyiciJfY?si=CYk7lmBFtjiQ6OFu", tags:["台北","初めてのシリーズ"], bg:true, home:1},
     {title:"台湾旅行🇹🇼九份に泊まるべき理由！猫村と十份も満喫しよう｜千と千尋の神隠しの舞台へ", url:"https://youtu.be/cFRRUZeZExw?si=05_9L_fMFrnB4VAi", tags:["新北","夜景"], bg:true,  home:2},
-    {title:"【【台湾グルメ8選】冬の台北グルメが最高🇹🇼絶品火鍋、カニおこわ、羊肉鍋｜台湾旅行", url:"https://youtu.be/dVsGH0ahRKc?si=195aAnPbH1Yi8sXR", tags:["台北","グルメ"], bg:true},
+    {title:"【台湾グルメ8選】冬の台北グルメが最高🇹🇼絶品火鍋、カニおこわ、羊肉鍋｜台湾旅行", url:"https://youtu.be/dVsGH0ahRKc?si=195aAnPbH1Yi8sXR", tags:["台北","グルメ"], bg:true},
     {title:"【台湾グルメ15選】台湾行く人必見👀台北の人気店を食べ歩き｜台湾旅行", url:"https://youtu.be/EW3CQ9G8FA8?si=sFqON11eH-_RV7J-", tags:["台北","グルメ"], bg:true},
     {title:"【台湾グルメ15選】台北行くなら食べなきゃ損！士林夜市は美食の宝庫🇹🇼台湾料理", url:"https://youtu.be/mGjwJ8kZJwk?si=POixTW_56wCNyE3Z", tags:["台北","グルメ"], bg:true},
     {title:"初めての台湾親子旅行！台北観光VLOG🇹🇼", url:"https://youtu.be/-1kJGeGonAM?si=MNy5zzVaPc5iBGuv", tags:["台北","親子旅"], bg:true,},
@@ -545,7 +584,7 @@ const TAIWAN_VIDEOS = {
     {title:"台湾旅行🇹🇼1泊2日で台南観光！日本の面影が残るノスタルジックな歴史の街", url:"https://youtu.be/5eYZ0sgQG-8?si=sIJCAF24YHThT4zJ", tags:["台南","歴史の町"], bg:true, home:4},
   ],
   east: [
-    {title:"台湾旅行🇹🇼電車で巡る台湾東部ノスルジックな夏旅。理想の田舎、見つけました🌾｜台東", url:"https://youtu.be/hCVAL1w_1Qg?si=q61bxV0Xq6S4ddL1", tags:["台東","自転車"], bg:true,home:8},
+    {title:"台湾旅行🇹🇼電車で巡る台湾東部ノスタルジックな夏旅。理想の田舎、見つけました🌾｜台東", url:"https://youtu.be/hCVAL1w_1Qg?si=q61bxV0Xq6S4ddL1", tags:["台東","自転車"], bg:true,home:8},
     {title:"台湾旅行🇹🇼日本人が知らない台湾…台湾東部の大自然を旅する｜花蓮", url:"https://youtu.be/2JQZZsfHZhU?si=48lpJbl5YqJCA2GF", tags:["花蓮","絶景"], bg:true, home:9},
   ],
 };
@@ -600,6 +639,7 @@ function extractYouTubeId(url){
 const stage = document.getElementById("videoStage");
 const infoLine = document.getElementById("infoLine");
 const watchBtn = document.getElementById("watchBtn");
+const watchLabel = document.getElementById("watchLabel");
 const regionNav = document.getElementById("regionNav");
 const regionMapImg = document.getElementById("regionMapImg");
 const regionMapMedia = document.querySelector(".region-detail-media");
@@ -662,23 +702,50 @@ function pickIntroEntries(all, region){
   return chosen.map(x => x.entry);
 }
 
-/* 背景で流す動画を選ぶ：bg:true の付いたものがあればそれだけ、無ければ再生できる全部 */
+/* BG_SLIDES が空の地域で使う：bg:true の付いたものがあればそれだけ、無ければ再生できる全部 */
 function pickBackgroundClips(entries){
   const playable = entries.filter(e => e.url);
   const chosen = playable.filter(e => e.bg);
   return chosen.length ? chosen : playable;
 }
 
-/* ---------- 背景サムネイルの表示（左へスライドして次へ） ---------- */
-const SLIDE_MS = 900; // スライドにかかる時間（CSSの transition と合わせる）
+/* ---------- 背景に流すものを、扱いやすい形にそろえる ---------- */
+// 1件を { kind:"image"|"video"|"youtube", ... } の形にする
+function normalizeSlide(s){
+  if(!s) return null;
+  const ytId = extractYouTubeId(s.url) || extractYouTubeId(s.link);
+  const entry = ytId ? getAllEntries().find(e => extractYouTubeId(e.url) === ytId) : null;
+  const base = {
+    title: s.title || (entry && entry.title) || "",
+    link: s.link || s.url || (entry && entry.url) || "",
+    seconds: Number(s.seconds) > 0 ? Number(s.seconds) : 0,
+    ytId,
+  };
+  if(s.video) return Object.assign(base, { kind:"video", src:s.video, poster:s.poster || "" });
+  if(s.image) return Object.assign(base, { kind:"image", src:s.image });
+  if(ytId)    return Object.assign(base, { kind:"youtube", id:ytId });
+  return null;
+}
+// 地域ごとの背景の並び：BG_SLIDES に書いてあればその順番、空なら bg:true のサムネイル
+function buildSlides(region, pool){
+  const custom = Array.isArray(BG_SLIDES[region]) ? BG_SLIDES[region] : [];
+  const list = custom.length
+    ? custom.map(normalizeSlide)
+    : pickBackgroundClips(pool).map(e => normalizeSlide({ url:e.url }));
+  return list.filter(Boolean);
+}
 
-let frameA, frameB, frames;
+/* ---------- 背景の表示（左へスライドして次へ） ---------- */
+const SLIDE_MS = 900;          // スライドにかかる時間（CSSの transition と合わせる）
+const MAX_VIDEO_SECONDS = 90;  // 動画が読み込めない・終わらない時の保険（この秒数で次へ進む）
+
+let slots = [];
 let currentRegion = DEFAULT_REGION;
 let currentEntries = [];
-let currentClips = [];   // いま背景で順番に流している動画（bg:true で選んだもの）
+let currentSlides = [];  // いま背景で順番に流しているもの
 let idx = 0;
 let visibleSide = 0;
-let playToken = 0; // 地域を切り替えたら増やし、古いタイマーを無効にする
+let playToken = 0;       // 地域を切り替えたら増やし、古いタイマーを無効にする
 let prepTimer = null;
 let switchTimer = null;
 
@@ -694,95 +761,140 @@ function setYouTubeThumb(img, id){
   tryNext();
 }
 
-function setClip(frame, clip){
-  const id = extractYouTubeId(clip.url);
-  if(id) setYouTubeThumb(frame, id);
-}
-
 function setupFrames(){
   stage.innerHTML = "";
-  frameA = document.createElement("img");
-  frameB = document.createElement("img");
-  frames = [frameA, frameB];
-  frames.forEach(f => {
-    f.alt = "";
-    f.decoding = "async";
-    stage.appendChild(f);
+  slots = [0, 1].map(() => {
+    const d = document.createElement("div");
+    d.className = "bg-slot";
+    stage.appendChild(d);
+    return d;
   });
 }
 
-// 画像を横位置(%)に置く。animate=true でスライド、false で一瞬で移動
-function place(frame, x, animate){
-  frame.style.transition = animate ? "" : "none";
-  frame.style.transform = `translateX(${x}%)`;
+// 枠を横位置(%)に置く。animate=true でスライド、false で一瞬で移動
+function place(el, x, animate){
+  el.style.transition = animate ? "" : "none";
+  el.style.transform = `translateX(${x}%)`;
+}
+
+function slotVideo(slot){ return slot.querySelector("video"); }
+
+// 枠の中身を、写真・動画・サムネイルのどれかに入れ替える
+function fillSlot(slot, slide){
+  const old = slotVideo(slot);
+  if(old){ old.pause(); old.removeAttribute("src"); old.load(); }
+  slot.innerHTML = "";
+  if(!slide) return;
+  if(slide.kind === "video"){
+    const v = document.createElement("video");
+    v.muted = true;
+    v.defaultMuted = true;
+    v.playsInline = true;
+    v.setAttribute("playsinline", "");
+    v.setAttribute("muted", "");
+    v.preload = "auto";
+    if(slide.poster) v.poster = slide.poster;
+    v.src = slide.src;
+    slot.appendChild(v);
+  } else {
+    const img = document.createElement("img");
+    img.alt = "";
+    img.decoding = "async";
+    if(slide.kind === "youtube") setYouTubeThumb(img, slide.id);
+    else img.src = slide.src;
+    slot.appendChild(img);
+  }
 }
 
 function resetFrames(){
-  frames.forEach(f => {
-    f.onload = f.onerror = null;
-    f.removeAttribute("src");
-    place(f, 100, false);
-  });
+  slots.forEach(s => { fillSlot(s, null); place(s, 100, false); });
 }
 
-function updateInfo(clip){
-  infoLine.textContent = clip && clip.title
-    ? `TAIWAN COLLECTION ｜ ${clip.title}`
-    : "TAIWAN COLLECTION ｜ この地域の動画は準備中です";
-  if(clip && clip.url){
-    watchBtn.href = clip.url;
+function updateInfo(slide){
+  if(!slide){
+    infoLine.textContent = "TAIWAN COLLECTION ｜ この地域の動画は準備中です";
+    watchBtn.style.visibility = "hidden";
+    return;
+  }
+  infoLine.textContent = slide.title ? `TAIWAN COLLECTION ｜ ${slide.title}` : "TAIWAN COLLECTION";
+  if(slide.link){
+    watchBtn.href = slide.link;
+    watchLabel.textContent = extractYouTubeId(slide.link) ? "YouTubeでこの動画を見る" : "詳しく見る";
     watchBtn.style.visibility = "visible";
   } else {
     watchBtn.style.visibility = "hidden";
   }
 }
 
-function startPlayback(startIndex){
+function startPlayback(){
   const token = ++playToken;
   clearTimeout(prepTimer);
   clearTimeout(switchTimer);
   resetFrames();
-  if(currentClips.length === 0){
+  if(currentSlides.length === 0){
     updateInfo(null);
     markPlaying(null);
     return;
   }
-  idx = startIndex;
+  idx = 0;
   visibleSide = 0;
-  setClip(frames[0], currentClips[idx % currentClips.length]);
-  place(frames[0], 0, false);
-  if(currentClips.length > 1){
-    setClip(frames[1], currentClips[(idx + 1) % currentClips.length]); // 次を右側で待機
+  fillSlot(slots[0], currentSlides[0]);
+  place(slots[0], 0, false);
+  if(currentSlides.length > 1){
+    fillSlot(slots[1], currentSlides[1]); // 次を右側で待機
   }
-  showCycle(token);
+  showCurrent(token);
 }
 
-function showCycle(token){
+// いま見えている1枚を表示し、表示時間が過ぎたら次へ
+function showCurrent(token){
   if(token !== playToken) return;
-  const clip = currentClips[idx % currentClips.length];
-  updateInfo(clip);
-  markPlaying(clip);
-  if(currentClips.length < 2) return; // 1本だけならスライドしない
+  const slide = currentSlides[idx % currentSlides.length];
+  const v = slotVideo(slots[visibleSide]);
+  updateInfo(slide);
+  markPlaying(slide);
+
+  if(v){
+    v.loop = currentSlides.length < 2;   // 1件だけならくり返す
+    try{ v.currentTime = 0; }catch(e){}
+    const p = v.play();
+    if(p && p.catch) p.catch(() => {});
+  }
+  if(currentSlides.length < 2) return;   // 1件だけならスライドしない
 
   clearTimeout(switchTimer);
-  switchTimer = setTimeout(() => {
+  const next = () => {
     if(token !== playToken) return;
-    const out = frames[visibleSide];
-    const inn = frames[1 - visibleSide];
-    idx++;
-    visibleSide = 1 - visibleSide;
-    place(out, -100, true); // 今のサムネイルは左へ
-    place(inn, 0, true);    // 次のサムネイルが右から入ってきて止まる
-    showCycle(token);
+    clearTimeout(switchTimer);
+    if(v){ v.onended = null; v.onerror = null; }
+    advance(token);
+  };
+  if(v && !slide.seconds){
+    // 動画：最後まで再生したら次へ（読み込めない時は標準の秒数で次へ）
+    v.onended = next;
+    v.onerror = () => { clearTimeout(switchTimer); switchTimer = setTimeout(next, BG_SECONDS * 1000); };
+    switchTimer = setTimeout(next, (v.error ? BG_SECONDS : MAX_VIDEO_SECONDS) * 1000);
+  } else {
+    switchTimer = setTimeout(next, (slide.seconds || BG_SECONDS) * 1000);
+  }
+}
 
-    // スライドが終わったら、出ていった画像を右側に戻して、さらに次のサムネイルを仕込む
-    clearTimeout(prepTimer);
-    prepTimer = setTimeout(() => {
-      if(token !== playToken) return;
-      place(out, 100, false);
-      setClip(out, currentClips[(idx + 1) % currentClips.length]);
-    }, SLIDE_MS + 100);
-  }, BG_SECONDS * 1000);
+function advance(token){
+  const out = slots[visibleSide];
+  const inn = slots[1 - visibleSide];
+  idx++;
+  visibleSide = 1 - visibleSide;
+  place(out, -100, true); // 今のものは左へ
+  place(inn, 0, true);    // 次のものが右から入ってきて止まる
+  showCurrent(token);
+
+  // スライドが終わったら、出ていった枠を右側に戻して、さらに次のものを仕込む
+  clearTimeout(prepTimer);
+  prepTimer = setTimeout(() => {
+    if(token !== playToken) return;
+    place(out, 100, false);
+    fillSlot(out, currentSlides[(idx + 1) % currentSlides.length]);
+  }, SLIDE_MS + 100);
 }
 
 /* ---------- 動画の紹介カード（スクロールで下から順番に現れる） ---------- */
@@ -884,8 +996,12 @@ function renderVideoCards(entries, region){
   setupReveal();
 }
 
-function markPlaying(clip){
-  cardEls.forEach((el, entry) => el.classList.toggle("playing", entry === clip));
+// 背景に出ているものと同じ動画のカードに「NOW PLAYING」を付ける（自分の写真・動画は link で判定）
+function markPlaying(slide){
+  const id = slide ? slide.ytId : null;
+  cardEls.forEach((el, entry) => {
+    el.classList.toggle("playing", !!id && extractYouTubeId(entry.url) === id);
+  });
 }
 
 /* ---------- 地域の切り替え ---------- */
@@ -896,12 +1012,12 @@ function selectRegion(region){
   });
   const all = getAllEntries();
   currentEntries = pickIntroEntries(all, region);                       // 下に紹介する動画
-  const bgPool = region === "all" ? all : currentEntries;               // 背景に使える候補（Topは全地方から選べる）
-  currentClips = pickBackgroundClips(bgPool);
+  const bgPool = region === "all" ? all : currentEntries;               // BG_SLIDES が空の時の候補（Topは全地方から）
+  currentSlides = buildSlides(region, bgPool);
   window.scrollTo({ top: 0, behavior: "auto" });
   renderVideoCards(currentEntries, region);
   updateRegionDetail(region);
-  startPlayback(0);
+  startPlayback();
 }
 
 function initRegionNav(){
