@@ -20,10 +20,10 @@
 const heroSlideSeconds = 5;
 
 const heroVideos = [
+  {url:"https://youtu.be/9zRV1wIk_Ks?si=G3b8eWSkKquWCLgv"},
   {url:"https://youtu.be/4BMXgev_Ce4?si=O7lBOwoMyIfe_VAZ"},
   {url:"https://youtu.be/kGfGfo0KHAM?si=RD2Yc6i7MhOg-Vf7"},
   {url:"https://youtu.be/f1JeJUbXehE?si=EFObG6A68iIn3y4H"},
-  {url:"https://youtu.be/9zRV1wIk_Ks?si=G3b8eWSkKquWCLgv"},
 ];
 
 /* ---------- ホームの横スクロール文字列（クリックでURLへ） ---------- */
